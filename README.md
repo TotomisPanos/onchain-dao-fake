@@ -1,111 +1,67 @@
-# 🚀 CryptoDevs DAO
+# CryptoDevs DAO
 
-A **fully on‑chain, NFT‑gated DAO** where every CryptoDevs NFT equals one vote. Members propose NFT purchases, vote, and—if the proposal passes—the DAO contract spends treasury ETH autonomously.
+Fully on-chain, NFT-gated DAO where CryptoDevs holders can propose, vote, and execute treasury decisions to purchase NFTs.
 
----
+## 🧠 What is this?
+A decentralized autonomous organization (DAO) that allows any CryptoDevs NFT holder to:
 
-## ✨ Features
+- Create proposals to buy NFTs from a marketplace
+- Vote with their NFTs (1 NFT = 1 vote)
+- Execute passed proposals automatically using DAO treasury ETH
 
-| Layer | Highlights |
-|-------|-----------|
-| **Smart‑contracts** | `CryptoDevsNFT` (ERC‑721 Enumerable)  
-`FakeNFTMarketplace` – fixed‑price mock shop  
-`CryptoDevsDAO` – proposals, voting & ETH treasury |
-| **Frontend** | Next .js 14 · Tailwind CSS · `ethers` v6 (no wagmi) |
-| **UX** | Native MetaMask connect, live on‑chain data, responsive dark UI |
-| **Tooling** | Foundry (compile + deploy), Vercel (CI/CD) |
+Everything is on-chain. No multisigs, no off-chain voting.
 
----
+## 🧩 Tech Stack
 
-## 🏗️ Architecture
+### Smart Contracts (Foundry)
+- `CryptoDevsNFT.sol` – Simple ERC721Enumerable NFT collection
+- `FakeNFTMarketplace.sol` – Simulates NFT purchases with fixed price logic
+- `CryptoDevsDAO.sol` – Proposal creation, voting, execution, and treasury control
 
-```mermaid
-graph TD
-  subgraph On‑chain
-    A(CryptoDevsNFT) -->|1 NFT = 1 vote| C[CryptoDevsDAO]
-    B(FakeNFTMarketplace) -->|purchase()| C
-  end
-  C -->|executeProposal| B
-  D(User wallet) -->|vote / propose| C
-  D -->|mint| A
-```
+### Frontend (Next.js + Tailwind CSS + Ethers.js)
+- Uses `ethers@6` directly (no wagmi)
+- DAO dashboard with live data: proposals, votes, execution buttons
+- NFT balance and treasury shown on load
+- Fully responsive and dark-themed
 
----
+## ⚙️ How it works
+1. Any holder of a CryptoDevs NFT can create a proposal to buy an NFT from the marketplace.
+2. Voting is open for 5 minutes.
+3. Each NFT gives one vote. No double voting allowed.
+4. If more "YAY" votes than "NAY" by the deadline, the DAO contract auto-purchases the NFT.
+5. The DAO treasury is stored in the DAO contract itself. Only proposals or the owner can move ETH.
 
-## ⚙️ Tech stack
-
-* **Solidity 0.8.x** + OpenZeppelin Contracts
-* **Foundry** for testing & deployment
-* **Next .js 14** (App Router)
-* **Tailwind CSS** for styling
-* **ethers v6** for RPC interactions
-* **Vercel** for hosting
-
----
-
-## 🚀 Quick start
-
-### 1 — Clone & install
-
+## 📦 Installation
 ```bash
-git clone https://github.com/YOUR_HANDLE/cryptodevs-dao.git
-cd cryptodevs-dao
+# Clone repo
+https://github.com/your-username/cryptodevs-dao.git
+
+# Frontend setup
+cd frontend
+npm install
+npm run dev
+
+# Contracts (optional)
+cd ../foundry
+forge install
+forge build
 ```
 
-### 2 — Contracts (Foundry)
+## 📄 Contracts
+| Name | Address | Network |
+|------|---------|---------|
+| CryptoDevsNFT | `0x...` | Sepolia |
+| FakeNFTMarketplace | `0x...` | Sepolia |
+| CryptoDevsDAO | `0x...` | Sepolia |
 
-```bash
-cd foundry
-cp .env.example .env   # fill PRIVATE_KEY, RPC_URL, ETHERSCAN_API_KEY
+## 🔗 Etherscan
+- [CryptoDevsNFT](https://etherscan.io/address/0x...)
+- [FakeNFTMarketplace](https://etherscan.io/address/0x...)
+- [CryptoDevsDAO](https://etherscan.io/address/0x...)
 
-forge test             # run tests
+## 📸 Preview
+![screenshot](https://i.imgur.com/buNhbF7.png)
 
-# deploy on Sepolia
-forge script script/Deploy.s.sol:Deploy --broadcast --verify -vvvv \
-  --rpc-url $RPC_URL --private-key $PRIVATE_KEY
-```
-
-Save the three printed addresses (NFT, Marketplace, DAO).
-
-### 3 — Frontend
-
-```bash
-cd ../frontend
-npm i
-
-cp src/constants/index.example.js src/constants/index.js   # paste addresses & ABIs
-npm run dev   # http://localhost:3000
-```
-
----
-
-## 📂 Project structure
-
-```
-cryptodevs-dao/
-├─ foundry/               # Solidity contracts & scripts
-│  ├─ src/
-│  ├─ script/
-│  └─ test/
-├─ frontend/              # Next.js dashboard
-│  ├─ src/
-│  └─ public/
-└─ README.md
-```
-
----
-
-## 🔐 .env template (foundry)
-
-```dotenv
-PRIVATE_KEY="0x…"
-RPC_URL="https://sepolia.infura.io/v3/…"
-ETHERSCAN_API_KEY="…"
-```
-
----
-
-## 📝 License
-
-MIT © 2025 CryptoDevs DAO contributors
+## 📃 License
+MIT
 
