@@ -1,127 +1,111 @@
-🐱‍🚀 CryptoDevs DAO – on‑chain, NFT‑gated treasury
+# 🚀 CryptoDevs DAO
 
-A fully on‑chain Decentralized Autonomous Organization where each CryptoDevs NFT equals one governance vote. Members propose purchases of NFTs, vote in real time, and—if a proposal passes—the DAO contract buys the target asset autonomously using treasury ETH.
+A **fully on‑chain, NFT‑gated DAO** where every CryptoDevs NFT equals one vote. Members propose NFT purchases, vote, and—if the proposal passes—the DAO contract spends treasury ETH autonomously.
 
-✨ Features
+---
 
-Layer
+## ✨ Features
 
-Highlights
+| Layer | Highlights |
+|-------|-----------|
+| **Smart‑contracts** | `CryptoDevsNFT` (ERC‑721 Enumerable)  
+`FakeNFTMarketplace` – fixed‑price mock shop  
+`CryptoDevsDAO` – proposals, voting & ETH treasury |
+| **Frontend** | Next .js 14 · Tailwind CSS · `ethers` v6 (no wagmi) |
+| **UX** | Native MetaMask connect, live on‑chain data, responsive dark UI |
+| **Tooling** | Foundry (compile + deploy), Vercel (CI/CD) |
 
-Smart Contracts
+---
 
-• CryptoDevsNFT – ERC‑721 Enumerable demo collection
+## 🏗️ Architecture
 
-• FakeNFTMarketplace – minimal fixed‑price NFT shop used for testing
+```mermaid
+graph TD
+  subgraph On‑chain
+    A(CryptoDevsNFT) -->|1 NFT = 1 vote| C[CryptoDevsDAO]
+    B(FakeNFTMarketplace) -->|purchase()| C
+  end
+  C -->|executeProposal| B
+  D(User wallet) -->|vote / propose| C
+  D -->|mint| A
+```
 
-• CryptoDevsDAO – proposal / voting / execution logic + ETH treasury
+---
 
-Frontend
+## ⚙️ Tech stack
 
-Next .js 14, React Server Components, Tailwind CSS, ethers v6 (no wagmi)
+* **Solidity 0.8.x** + OpenZeppelin Contracts
+* **Foundry** for testing & deployment
+* **Next .js 14** (App Router)
+* **Tailwind CSS** for styling
+* **ethers v6** for RPC interactions
+* **Vercel** for hosting
 
-Wallet UX
+---
 
-Native MetaMask connect; live chain data (balances, deadlines, votes) via JSON‑RPC
+## 🚀 Quick start
 
-Deployment
+### 1 — Clone & install
 
-Foundry for compilation, testing & Sepolia deployment; Vercel for hosting
-
-🏗 Contract Architecture
-
-          +----------------------+
-          |  CryptoDevsDAO.sol   |
-          |----------------------|
-          |  proposals mapping   |
-          |  treasury (ETH)      |
-          +-----^-----------^----+
-                |           |
-      vote() / execute()  purchase()
-                |           |
-+---------------+           +--------------------+
-|                                 |
-|                         FakeNFTMarketplace.sol
-|                         (0.1 ETH fixed price)
-|
-CryptoDevsNFT.sol  (ERC‑721 – 1 token = 1 vote)
-
-⚙️ Stack
-
-Solidity 0.8.x with OpenZeppelin Contracts
-
-Foundry – forge build & deploy scripts
-
-Next .js 14 (App Router)
-
-Tailwind CSS for styling
-
-ethers v6 – reads, writes & event listening
-
-Vercel – one‑click CI/CD
-
-🚀 Quick start
-
-1 — Clone & install
-
+```bash
 git clone https://github.com/YOUR_HANDLE/cryptodevs-dao.git
 cd cryptodevs-dao
+```
 
-2 — Smart‑contracts
+### 2 — Contracts (Foundry)
 
+```bash
 cd foundry
 cp .env.example .env   # fill PRIVATE_KEY, RPC_URL, ETHERSCAN_API_KEY
 
-# compile & test
-a
-forge test
+forge test             # run tests
 
-# deploy (Sepolia)
+# deploy on Sepolia
 forge script script/Deploy.s.sol:Deploy --broadcast --verify -vvvv \
   --rpc-url $RPC_URL --private-key $PRIVATE_KEY
+```
 
-Save the three addresses printed (CryptoDevsNFT, FakeNFTMarketplace, CryptoDevsDAO).
+Save the three printed addresses (NFT, Marketplace, DAO).
 
-3 — Frontend
+### 3 — Frontend
 
+```bash
 cd ../frontend
 npm i
 
-# add constants
-cp src/constants/index.example.js src/constants/index.js
-# ➜ paste the contract addresses & ABIs
-
+cp src/constants/index.example.js src/constants/index.js   # paste addresses & ABIs
 npm run dev   # http://localhost:3000
+```
 
-📂 Project structure
+---
 
+## 📂 Project structure
+
+```
 cryptodevs-dao/
 ├─ foundry/               # Solidity contracts & scripts
 │  ├─ src/
 │  ├─ script/
 │  └─ test/
-├─ frontend/              # Next.js + Tailwind dashboard
+├─ frontend/              # Next.js dashboard
 │  ├─ src/
 │  └─ public/
 └─ README.md
+```
 
-🔐 .env reference (foundry)
+---
 
+## 🔐 .env template (foundry)
+
+```dotenv
 PRIVATE_KEY="0x…"
 RPC_URL="https://sepolia.infura.io/v3/…"
 ETHERSCAN_API_KEY="…"
+```
 
-🖼 Screenshots
+---
 
-Dashboard
-
-Proposal modal
-
-
-
-
-
-📝 License
+## 📝 License
 
 MIT © 2025 CryptoDevs DAO contributors
 
