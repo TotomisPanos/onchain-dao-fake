@@ -1,66 +1,127 @@
-## Foundry
+🐱‍🚀 CryptoDevs DAO – on‑chain, NFT‑gated treasury
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+A fully on‑chain Decentralized Autonomous Organization where each CryptoDevs NFT equals one governance vote. Members propose purchases of NFTs, vote in real time, and—if a proposal passes—the DAO contract buys the target asset autonomously using treasury ETH.
 
-Foundry consists of:
+✨ Features
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+Layer
 
-## Documentation
+Highlights
 
-https://book.getfoundry.sh/
+Smart Contracts
 
-## Usage
+• CryptoDevsNFT – ERC‑721 Enumerable demo collection
 
-### Build
+• FakeNFTMarketplace – minimal fixed‑price NFT shop used for testing
 
-```shell
-$ forge build
-```
+• CryptoDevsDAO – proposal / voting / execution logic + ETH treasury
 
-### Test
+Frontend
 
-```shell
-$ forge test
-```
+Next .js 14, React Server Components, Tailwind CSS, ethers v6 (no wagmi)
 
-### Format
+Wallet UX
 
-```shell
-$ forge fmt
-```
+Native MetaMask connect; live chain data (balances, deadlines, votes) via JSON‑RPC
 
-### Gas Snapshots
+Deployment
 
-```shell
-$ forge snapshot
-```
+Foundry for compilation, testing & Sepolia deployment; Vercel for hosting
 
-### Anvil
+🏗 Contract Architecture
 
-```shell
-$ anvil
-```
+          +----------------------+
+          |  CryptoDevsDAO.sol   |
+          |----------------------|
+          |  proposals mapping   |
+          |  treasury (ETH)      |
+          +-----^-----------^----+
+                |           |
+      vote() / execute()  purchase()
+                |           |
++---------------+           +--------------------+
+|                                 |
+|                         FakeNFTMarketplace.sol
+|                         (0.1 ETH fixed price)
+|
+CryptoDevsNFT.sol  (ERC‑721 – 1 token = 1 vote)
 
-### Deploy
+⚙️ Stack
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
+Solidity 0.8.x with OpenZeppelin Contracts
 
-### Cast
+Foundry – forge build & deploy scripts
 
-```shell
-$ cast <subcommand>
-```
+Next .js 14 (App Router)
 
-### Help
+Tailwind CSS for styling
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+ethers v6 – reads, writes & event listening
+
+Vercel – one‑click CI/CD
+
+🚀 Quick start
+
+1 — Clone & install
+
+git clone https://github.com/YOUR_HANDLE/cryptodevs-dao.git
+cd cryptodevs-dao
+
+2 — Smart‑contracts
+
+cd foundry
+cp .env.example .env   # fill PRIVATE_KEY, RPC_URL, ETHERSCAN_API_KEY
+
+# compile & test
+a
+forge test
+
+# deploy (Sepolia)
+forge script script/Deploy.s.sol:Deploy --broadcast --verify -vvvv \
+  --rpc-url $RPC_URL --private-key $PRIVATE_KEY
+
+Save the three addresses printed (CryptoDevsNFT, FakeNFTMarketplace, CryptoDevsDAO).
+
+3 — Frontend
+
+cd ../frontend
+npm i
+
+# add constants
+cp src/constants/index.example.js src/constants/index.js
+# ➜ paste the contract addresses & ABIs
+
+npm run dev   # http://localhost:3000
+
+📂 Project structure
+
+cryptodevs-dao/
+├─ foundry/               # Solidity contracts & scripts
+│  ├─ src/
+│  ├─ script/
+│  └─ test/
+├─ frontend/              # Next.js + Tailwind dashboard
+│  ├─ src/
+│  └─ public/
+└─ README.md
+
+🔐 .env reference (foundry)
+
+PRIVATE_KEY="0x…"
+RPC_URL="https://sepolia.infura.io/v3/…"
+ETHERSCAN_API_KEY="…"
+
+🖼 Screenshots
+
+Dashboard
+
+Proposal modal
+
+
+
+
+
+📝 License
+
+MIT © 2025 CryptoDevs DAO contributors
+
